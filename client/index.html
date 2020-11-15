@@ -1,12 +1,14 @@
+<canvas id="ctx" width="500" height="500" style="border:1px solid #000;"></canvas>
 <script src="http://cdn.socket.io/socket.io-3.0.1.js"></script>
 <script>
+    var ctx = document.getElementById("ctx").getContext("2d");
+    ctx.font = '30px Ariel';
+
     var socket = io();
 
-    function happy() {
-        socket.emit('happy',{
-            reason: "I'm on drugs"
-        })
-    }
-</script>
+    socket.on('newPosition', function(data) {
+        ctx.clearRect(0,0,500,500)
+        ctx.fillText('tryna?', data.x, data.y);
+    })
 
-<button onclick="happy()">Happy</button>
+</script>
