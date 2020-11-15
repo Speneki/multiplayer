@@ -1,0 +1,12 @@
+<script src="http://cdn.socket.io/socket.io-3.0.1.js"></script>
+<script>
+    var socket = io();
+
+    function happy() {
+        socket.emit('happy',{
+            reason: "I'm on drugs"
+        })
+    }
+</script>
+
+<button onclick="happy()">Happy</button>
