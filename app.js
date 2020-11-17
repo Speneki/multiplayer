@@ -31,33 +31,37 @@ var Entity = function() {
         self.x += self.spdX;
         self.y += self.spdY;
     }
+    return self;
 }
 var Player = function(id) {
     var self = Entity();
-
+    
     self.id = id;
     self.pressingRight = false;
     self.pressingLeft = false;
     self.pressingUp = false;
     self.pressingDown = false;
     self.number = "" + Math.floor(10 * Math.random());
+    self.maxSpd = 1;
 
     var super_update = self.update;
 
-    self.updatePosition = function() {
-        if(self.pressingRight)
-            if (self.x < MAX_WIDTH - 20)
-                self.spdX += self.maxSpd;
-        if(self.pressingLeft)
-            if (self.x > 0 )
-                self.spdX -= self.maxSpd;
-        if(self.pressingUp)
-            if (self.y > 0 + 15)
-                self.spdY -= self.maxSpd;
-        if(self.pressingDown) 
-            if (self.y < MAX_HEIGHT)
-                self.spdY += self.maxSpd;
+    self.update = function() {
+        self.updateSpd();
+        super_update();
     }
+    
+    self.updateSpd = function() {
+        if(self.pressingRight)
+            self.spdX += self.maxSpd;
+        if(self.pressingLeft)
+            self.spdX -= self.maxSpd;
+        if(self.pressingUp)
+            self.spdY -= self.maxSpd;
+        if(self.pressingDown) 
+            self.spdY += self.maxSpd;
+    }
+    Player.list[id] = self;
 
     return self;
 }
