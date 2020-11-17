@@ -42,7 +42,7 @@ var Player = function(id) {
     self.pressingUp = false;
     self.pressingDown = false;
     self.number = "" + Math.floor(10 * Math.random());
-    self.maxSpd = 1;
+    self.maxSpd = 10;
 
     var super_update = self.update;
 
@@ -52,14 +52,22 @@ var Player = function(id) {
     }
     
     self.updateSpd = function() {
-        if(self.pressingRight)
-            self.spdX += self.maxSpd;
-        if(self.pressingLeft)
-            self.spdX -= self.maxSpd;
-        if(self.pressingUp)
-            self.spdY -= self.maxSpd;
-        if(self.pressingDown) 
-            self.spdY += self.maxSpd;
+        if(self.pressingRight) {
+            self.spdX = self.maxSpd;
+        }
+        else if(self.pressingLeft) {
+            self.spdX = -self.maxSpd;
+        }
+        else self.spdX = 0 
+
+        if(self.pressingUp) {
+            self.spdY = -self.maxSpd;
+        }
+        else if(self.pressingDown) {
+           self.spdY = self.maxSpd;
+        } else self.spdY = 0
+        console.log("x: " + self.x)
+        console.log("y: " + self.y)
     }
     Player.list[id] = self;
 
