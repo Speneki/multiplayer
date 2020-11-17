@@ -6,6 +6,9 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/client/index.html');
 });
 
+const MAX_HEIGHT = 500;
+const MAX_WIDTH = 500;
+
 app.use("client", express.static(__dirname + "/client"));
 
 serv.listen(2000);
@@ -28,13 +31,17 @@ var Player = function(id) {
     }
     self.updatePosition = function() {
         if(self.pressingRight)
-            self.x += self.maxSpd;
+            if (self.x < MAX_WIDTH - 20)
+                self.x += self.maxSpd;
         if(self.pressingLeft)
-            self.x -= self.maxSpd;
+            if (self.x > 0 )
+                self.x -= self.maxSpd;
         if(self.pressingUp)
-            self.y -= self.maxSpd;
+            if (self.y > 0 + 15)
+                self.y -= self.maxSpd;
         if(self.pressingDown) 
-            self.y += self.maxSpd;
+            if (self.y < MAX_HEIGHT)
+                self.y += self.maxSpd;
     }
 
     return self;
@@ -43,7 +50,7 @@ var Player = function(id) {
 
 var io = require("socket.io")(serv,{});
 io.sockets.on('connection', function(socket) { 
-    console.log(" ===> Socket is connected")
+    console.log(" ===> A socket is connected")
 
     socket.id = Math.random();
     SOCKET_LIST[socket.id] = socket;
@@ -51,6 +58,7 @@ io.sockets.on('connection', function(socket) {
     var player = Player(socket.id);
     PLAYER_LIST[socket.id] = player;
     socket.on("disconnect", function() {
+        console.log(" ===> A socket is disconnected")
         delete SOCKET_LIST[socket.id];
         delete PLAYER_LIST[socket.id];
     });
