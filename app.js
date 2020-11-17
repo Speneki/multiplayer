@@ -100,6 +100,25 @@ Player.update = function() {
     }
     return pack;
 }
+
+var Bullet = function(angle) {
+    var self = Entity();
+    self.id = Math.random();
+    self.spdX = Math.cos(angle/180*Math.PI) * 10;
+    self.spdY = Math.sin(angle / 180 * Math.PI) * 10;
+
+    self.timer = 0;
+    self.toRemove = false;
+    self.super_update = self.update;
+    self.update = function() {
+        if (self.timer++ > 100) 
+            self.toRemove = true;
+        super_update();
+    }
+    Bullet.list[self.id] = self;
+    return self;
+}
+Bullet.list = {};
 var io = require("socket.io")(serv,{});
 io.sockets.on('connection', function(socket) { 
     console.log(" ===> A socket is connected")
