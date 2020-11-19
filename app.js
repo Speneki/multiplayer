@@ -1,6 +1,6 @@
-var express = require('express');
-var app = express();
-var serv = require('http').Server(app);
+let express = require('express');
+let app = express();
+let serv = require('http').Server(app);
 
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/client/index.html');
@@ -14,10 +14,10 @@ app.use("client", express.static(__dirname + "/client"));
 serv.listen(2000);
 console.log(" ===> Server has started... ")
 
-var SOCKET_LIST = {};
+let SOCKET_LIST = {};
 
-var Entity = function() {
-    var self = {
+let Entity = function() {
+    let self = {
         x: 250,
         y: 250,
         spdX: 0,
@@ -33,8 +33,8 @@ var Entity = function() {
     }
     return self;
 }
-var Player = function(id) {
-    var self = Entity();
+let Player = function(id) {
+    let self = Entity();
     
     self.id = id;
     self.pressingRight = false;
@@ -46,7 +46,7 @@ var Player = function(id) {
     self.number = "" + Math.floor(10 * Math.random());
     self.maxSpd = 10;
 
-    var super_update = self.update;
+    let super_update = self.update;
 
     self.update = function() {
         self.updateSpd();
@@ -57,7 +57,7 @@ var Player = function(id) {
         } 
     }
     self.shootBullet = function(angle) {
-        var b = Bullet(angle);
+        let b = Bullet(angle);
         b.x = self.x;
         b.y = self.y;
     }
@@ -84,7 +84,7 @@ var Player = function(id) {
 }
 Player.list = {};
 Player.onConnect = function(socket){
-    var player = Player(socket.id);
+    let player = Player(socket.id);
     socket.on("keyPress", function (data) {
         if (data.inputId === 'right') player.pressingRight = data.state
         if (data.inputId === 'left') player.pressingLeft = data.state
@@ -100,9 +100,9 @@ Player.onDisconnect = function (socket) {
     delete Player.list[socket.id];
 }
 Player.update = function() {
-    var pack = [];
-    for (var i in Player.list) {
-        var player = Player.list[i];
+    let pack = [];
+    for (let i in Player.list) {
+        let player = Player.list[i];
         player.update();
         pack.push({
             x: player.x,
@@ -113,15 +113,15 @@ Player.update = function() {
     return pack;
 }
 
-var Bullet = function(angle) {
-    var self = Entity();
+let Bullet = function(angle) {
+    let self = Entity();
     self.id = Math.random();
     self.spdX = Math.cos(angle/180 * Math.PI) * 10;
     self.spdY = Math.sin(angle/180 * Math.PI) * 10;
 
     self.timer = 0;
     self.toRemove = false;
-    var super_update = self.update;
+    let super_update = self.update;
     self.update = function() {
         if (self.timer++ > 100) 
             self.toRemove = true;
@@ -135,9 +135,9 @@ Bullet.list = {};
 
 Bullet.update = function() {
 
-    var pack = [];
-    for(var i in Bullet.list) {
-        var bullet = Bullet.list[i];
+    let pack = [];
+    for(let i in Bullet.list) {
+        let bullet = Bullet.list[i];
         bullet.update();
         pack.push({
             x: bullet.x,
@@ -147,7 +147,7 @@ Bullet.update = function() {
     return pack;
 } 
 
-var io = require("socket.io")(serv,{});
+let io = require("socket.io")(serv,{});
 io.sockets.on('connection', function(socket) { 
     console.log(" ===> A socket is connected")
     socket.id = Math.random();
@@ -161,26 +161,26 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on("sendMesgToServer", function(data){
-        var playerName = ("" + socket.id).slice(2,7);
+        let playerName = ("" + socket.id).slice(2,7);
         for( let i in SOCKET_LIST ) {
             SOCKET_LIST[i].emit("addToChat", playerName + ': ' + data);
         }
     })
 
     socket.on('evalServer', function(data){
-        var res = eval(data);
+        let res = eval(data);
         socket.emit('evalAnswer', res)
     })
 });
 
 setInterval(function() {
-    var pack = {
+    let pack = {
         player: Player.update(),
         bullet: Bullet.update()
     }
 
-    for (var i in SOCKET_LIST) {
-        var socket = SOCKET_LIST[i];
+    for (let i in SOCKET_LIST) {
+        let socket = SOCKET_LIST[i];
         socket.emit('newPositions', pack)
     }
 }, 1000/25)
