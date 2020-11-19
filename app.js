@@ -96,7 +96,6 @@ Player.onConnect = function(socket){
         if (data.inputId === 'down') player.pressingDown = data.state
         if (data.inputId === 'attack') player.pressingAttack = data.state
         if (data.inputId === 'mouseAngle') player.mouseAngle = data.state
-
     }); 
 }
 Player.onDisconnect = function (socket) {
@@ -175,6 +174,9 @@ io.sockets.on('connection', function(socket) {
         Player.onDisconnect(socket);
     });
 
+    socket.on('signIn', function(date) {
+        
+    })
     socket.on("sendMesgToServer", function(data){
         let playerName = ("" + socket.id).slice(2,7);
         for( let i in SOCKET_LIST ) {

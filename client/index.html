@@ -27,7 +27,16 @@
     let signDiv = document.getElementById('signDiv-signUp');
     let signDivPassword = document.getElementById('signDiv-password');
 
-
+    signDivSignIn.onclick = function() {
+        socket.emit('signIn',{username: signDivUsername.value, password: signDivPassword.value})
+    }
+    socket.on('signInResponse', function(data){
+        if(data.success){
+            signDiv.style.display="none";
+            gameDiv.style.display="inline-block"
+        } else
+            alert('Sign in unsuccessful.')
+    })
     //Playing game
     var chatText = document.getElementById("chat-text");
     var chatInput = document.getElementById("chat-input");
