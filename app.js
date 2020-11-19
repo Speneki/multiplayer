@@ -17,7 +17,6 @@ console.log(" ===> Server has started... ")
 var SOCKET_LIST = {};
 
 var Entity = function() {
-    console.log("entity called")
     var self = {
         x: 250,
         y: 250,
@@ -67,8 +66,6 @@ var Player = function(id) {
         else if(self.pressingDown) {
            self.spdY = self.maxSpd;
         } else self.spdY = 0
-        console.log("x: " + self.x)
-        console.log("y: " + self.y)
     }
     Player.list[id] = self;
 
