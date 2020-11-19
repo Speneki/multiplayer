@@ -1,4 +1,5 @@
 let express = require('express');
+const { setMaxListeners } = require('process');
 let app = express();
 let serv = require('http').Server(app);
 
@@ -31,6 +32,9 @@ let Entity = function() {
         self.x += self.spdX;
         self.y += self.spdY;
     }
+    self.getDistance = function(pt) {
+        return Math.sqrt(Math.pow(self.x-pt.x, 2) + Math.pow(self.y-pt.y ,2))
+    }
     return self;
 }
 let Player = function(id) {
@@ -57,7 +61,7 @@ let Player = function(id) {
         } 
     }
     self.shootBullet = function(angle) {
-        let b = Bullet(angle);
+        let b = Bullet(self.id, angle);
         b.x = self.x;
         b.y = self.y;
     }
@@ -113,19 +117,27 @@ Player.update = function() {
     return pack;
 }
 
-let Bullet = function(angle) {
+let Bullet = function(parent, angle) {
     let self = Entity();
     self.id = Math.random();
     self.spdX = Math.cos(angle/180 * Math.PI) * 10;
     self.spdY = Math.sin(angle/180 * Math.PI) * 10;
-
     self.timer = 0;
+    self.parent = parent;
     self.toRemove = false;
     let super_update = self.update;
     self.update = function() {
         if (self.timer++ > 100) 
             self.toRemove = true;
         super_update();
+
+        for(let i in Player.list) {
+            var p = Player.list[i];
+            if(self.getDistance(p) < 32 && self.parent!== p.id) {
+                //handle Collission 
+                self.toRemove = true;
+            }
+        }
     }
     Bullet.list[self.id] = self;
     return self;
@@ -139,6 +151,9 @@ Bullet.update = function() {
     for(let i in Bullet.list) {
         let bullet = Bullet.list[i];
         bullet.update();
+        if(bullet.toRemove) {
+            delete Bullet.list[i];
+        }
         pack.push({
             x: bullet.x,
             y: bullet.y
