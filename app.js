@@ -119,6 +119,13 @@ var Bullet = function(angle) {
     return self;
 }
 Bullet.list = {};
+Bullet.update = function() {
+    var pack = [];
+    for(var i in Bullet.list) {
+        var bullet = Bullet.list[i];
+        bullet.update
+    }
+}
 var io = require("socket.io")(serv,{});
 io.sockets.on('connection', function(socket) { 
     console.log(" ===> A socket is connected")
