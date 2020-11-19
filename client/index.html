@@ -1,22 +1,41 @@
-<canvas id="ctx" width="500" height="500" style="border:1px solid #000;"></canvas>
-
-<div id="chat-text" style="width: 500px;height: 100px;overflow-y: scroll;">
-    <div style='text-align: center;'>Hello, Type to chat!</div>
+<div id="signDiv">
+    Username: <input id="signDiv-username" type="text"></input></br>
+    Password: <input id="signDiv-password" type=password></input>
+    <button id="signDiv-signIn">Sign In</button>
+    <button id="signDiv-signUp">Sign Up</button>
 </div>
-<form id="chat-form" action="">
-    <input id="chat-input" type="text" style="width: 500px;"></input>
-</form>
 
+<div id="gameDiv" style="display:none;">
+    <canvas id="ctx" width="500" height="500" style="border:1px solid #000;"></canvas>
+    
+    <div id="chat-text" style="width: 500px;height: 100px;overflow-y: scroll;">
+        <div style='text-align: center;'>Hello, Type to chat!</div>
+    </div>
+    <form id="chat-form" action="">
+        <input id="chat-input" type="text" style="width: 500px;"></input>
+    </form>
+</div>
+    
 <script src="http://cdn.socket.io/socket.io-3.0.1.js"></script>
 <script>
+    var socket = io();
+
+    //signing in
+    let signDiv = document.getElementById('signDiv');
+    let signDivUsername = document.getElementById('signDiv-username');
+    let signDivSignIn = document.getElementById('signDiv-signIn');
+    let signDiv = document.getElementById('signDiv-signUp');
+    let signDivPassword = document.getElementById('signDiv-password');
+
+
+    //Playing game
     var chatText = document.getElementById("chat-text");
     var chatInput = document.getElementById("chat-input");
     var chatForm = document.getElementById("chat-form");
-
     var ctx = document.getElementById("ctx").getContext("2d");
     ctx.font = '30px Ariel';
 
-    var socket = io();
+
 
     socket.on('newPositions', function(data) {
         ctx.clearRect(0,0,500,500)
