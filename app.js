@@ -148,6 +148,17 @@ io.sockets.on('connection', function(socket) {
         Player.onDisconnect(socket);
     });
 
+    socket.on("sendMesgToServer", function(data){
+        var playerName = ("" + socket.id).slice(2,7);
+        for( let i in SOCKET_LIST ) {
+            SOCKET_LIST[i].emit("addToChat", playerName + ': ' + data);
+        }
+    })
+
+    socket.on('evalServer', function(data){
+        var res = eval(data);
+        socket.emit('evalAnswer', res)
+    })
 });
 
 setInterval(function() {
