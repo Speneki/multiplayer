@@ -167,7 +167,14 @@ io.sockets.on('connection', function(socket) {
     socket.id = Math.random();
     SOCKET_LIST[socket.id] = socket;
 
-    Player.onConnect(socket); 
+    socket.on('signIn', function (date) {
+        if(data.username === 'bob' && data.password === 'asd') {
+            Player.onConnect(socket); 
+            socket.emit('signInResponse', {success: true})
+        } else 
+            socket.emit('signInResponse', {success:false})
+    })
+    
     socket.on("disconnect", function() {
         console.log(" ===> A socket is disconnected")
         delete SOCKET_LIST[socket.id];
