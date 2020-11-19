@@ -17,6 +17,7 @@ console.log(" ===> Server has started... ")
 var SOCKET_LIST = {};
 
 var Entity = function() {
+    console.log("entity called")
     var self = {
         x: 250,
         y: 250,
@@ -66,6 +67,8 @@ var Player = function(id) {
         else if(self.pressingDown) {
            self.spdY = self.maxSpd;
         } else self.spdY = 0
+        console.log("x: " + self.x)
+        console.log("y: " + self.y)
     }
     Player.list[id] = self;
 
@@ -102,12 +105,12 @@ Player.update = function() {
 var Bullet = function(angle) {
     var self = Entity();
     self.id = Math.random();
-    self.spdX = Math.cos(angle/180*Math.PI) * 10;
-    self.spdY = Math.sin(angle / 180 * Math.PI) * 10;
+    self.spdX = Math.cos(angle/180 * Math.PI) * 10;
+    self.spdY = Math.sin(angle/180 * Math.PI) * 10;
 
     self.timer = 0;
     self.toRemove = false;
-    self.super_update = self.update;
+    var super_update = self.update;
     self.update = function() {
         if (self.timer++ > 100) 
             self.toRemove = true;
@@ -121,9 +124,10 @@ Bullet.update = function() {
     var pack = [];
     for(var i in Bullet.list) {
         var bullet = Bullet.list[i];
-        bullet.update
+        bullet.update();
     }
 } 
+
 var io = require("socket.io")(serv,{});
 io.sockets.on('connection', function(socket) { 
     console.log(" ===> A socket is connected")
@@ -145,5 +149,4 @@ setInterval(function() {
         var socket = SOCKET_LIST[i];
         socket.emit('newPositions', pack)
     }
-    
 }, 1000/25)
