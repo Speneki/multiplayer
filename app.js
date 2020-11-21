@@ -161,14 +161,23 @@ Bullet.update = function() {
     return pack;
 } 
 
+let USERS = {
+    // username: password
+    "spencer":"pass"
+}
+
+let isValidPassword = function(data) {
+    return USERS[data.username] === data.password;
+}
+
 let io = require("socket.io")(serv,{});
 io.sockets.on('connection', function(socket) { 
     console.log(" ===> A socket is connected")
     socket.id = Math.random();
     SOCKET_LIST[socket.id] = socket;
 
-    socket.on('signIn', function (date) {
-        if(data.username === 'bob' && data.password === 'asd') {
+    socket.on('signIn', function (data) {
+        if (isValidPassword(data)) {
             Player.onConnect(socket); 
             socket.emit('signInResponse', {success: true})
         } else 
@@ -181,9 +190,6 @@ io.sockets.on('connection', function(socket) {
         Player.onDisconnect(socket);
     });
 
-    socket.on('signIn', function(date) {
-        
-    })
     socket.on("sendMesgToServer", function(data){
         let playerName = ("" + socket.id).slice(2,7);
         for( let i in SOCKET_LIST ) {

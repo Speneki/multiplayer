@@ -24,7 +24,7 @@
     let signDiv = document.getElementById('signDiv');
     let signDivUsername = document.getElementById('signDiv-username');
     let signDivSignIn = document.getElementById('signDiv-signIn');
-    let signDiv = document.getElementById('signDiv-signUp');
+    let signDivSignUp = document.getElementById('signDiv-signUp');
     let signDivPassword = document.getElementById('signDiv-password');
 
     signDivSignIn.onclick = function() {
@@ -32,10 +32,14 @@
     }
     socket.on('signInResponse', function(data){
         if(data.success){
+            console.log('success')
             signDiv.style.display="none";
             gameDiv.style.display="inline-block"
-        } else
+        } else {
+            signDivUsername.value = "";
+            signDivPassword.value = "";
             alert('Sign in unsuccessful.')
+        }
     })
     //Playing game
     var chatText = document.getElementById("chat-text");
