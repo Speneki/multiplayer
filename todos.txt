@@ -1,0 +1,8 @@
+MongoDB database for players username and passwords
+Async signin sign up responses
+Branch out on what kind of game I can make from here? 
+    - Asteroids? 
+    - Some sort of multiplayer shooter game?
+    - Wave of monsters type deal? 
+
+Figure it out, boyo
