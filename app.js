@@ -188,9 +188,9 @@ io.sockets.on('connection', function(socket) {
         if (!Object.keys(USERS).includes(data.username)) {
             USERS[data.username] = data.password
             Player.onConnect(socket);
-            socket.emit('signInResponse', { success: true })
+            socket.emit('signUpResponse', { success: true })
         } else
-            socket.emit('signInResponse', { success: false })
+            socket.emit('signUpResponse', { success: false })
     })
 
     socket.on("disconnect", function() {
