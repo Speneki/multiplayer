@@ -193,7 +193,7 @@ io.sockets.on('connection', function(socket) {
     })
     
     socket.on('signUp', function (data) {
-        if (isUsernameTaken(data)) {
+        if (!isUsernameTaken(data)) {
             addUser(data);
             Player.onConnect(socket);
             socket.emit('signUpResponse', { success: true })

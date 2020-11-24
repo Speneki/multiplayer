@@ -46,13 +46,12 @@
     })
     socket.on('signUpResponse', function(data){
         if(data.success){
-            alert("Sign Up successful");
             signDiv.style.display = "none";
             gameDiv.style.display = "inline-block"
         } else {
             signDivUsername.value = "";
             signDivPassword.value = "";
-            alert('Sign in unsuccessful.')
+            alert('Sign up unsuccessful.')
         }
     })
 
