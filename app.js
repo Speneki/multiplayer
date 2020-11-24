@@ -170,6 +170,14 @@ let isValidPassword = function(data) {
     return USERS[data.username] === data.password;
 }
 
+let isUsernameTaken = function(data) {
+    return USERS[data.username];
+}
+
+let addUser = function(data) {
+    USERS[data.username] = data.username;
+}
+
 let io = require("socket.io")(serv,{});
 io.sockets.on('connection', function(socket) { 
     console.log(" ===> A socket is connected")
@@ -185,8 +193,8 @@ io.sockets.on('connection', function(socket) {
     })
     
     socket.on('signUp', function (data) {
-        if (!Object.keys(USERS).includes(data.username)) {
-            USERS[data.username] = data.password
+        if (isUsernameTaken(data)) {
+            addUser(data);
             Player.onConnect(socket);
             socket.emit('signUpResponse', { success: true })
         } else
