@@ -166,17 +166,23 @@ let USERS = {
     "spencer":"pass"
 }
 
-let isValidPassword = function(data) {
-    return USERS[data.username] === data.password;
+let isValidPassword = function(data, cb) {
+    setTimeout(function(){
+        return USERS[data.username] === data.password;
+    }, 10);
 }
 
-let isUsernameTaken = function(data) {
-    return USERS[data.username];
+let isUsernameTaken = function(data, cb) {
+    setTimeout(function () {
+        return USERS[data.username];
+    }, 10)
 }
 
-let addUser = function(data) {
-    USERS[data.username] = data.username;
-}
+let addUser = function(data, cb) {
+    setTimeout(function () {
+        USERS[data.username] = data.username;
+    }, 10);
+}   
 
 let io = require("socket.io")(serv,{});
 io.sockets.on('connection', function(socket) { 
