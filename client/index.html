@@ -46,6 +46,7 @@
     })
     socket.on('signUpResponse', function(data){
         if(data.success){
+            alert("New Account created! ")
             signDiv.style.display = "none";
             gameDiv.style.display = "inline-block"
         } else {
