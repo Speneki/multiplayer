@@ -6,3 +6,5 @@ Branch out on what kind of game I can make from here?
     - Wave of monsters type deal? 
 
 Figure it out, boyo
+
+working on that dang MongoDB error
