@@ -12,7 +12,7 @@ const MAX_WIDTH = 500;
 
 app.use("client", express.static(__dirname + "/client"));
 
-serv.listen(2000);
+serv.listen(process.env.PORT || 2000);
 console.log(" ===> Server has started... ")
 
 let SOCKET_LIST = {};
