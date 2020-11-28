@@ -1,3 +1,8 @@
+let mongojs = require('mongojs')
+let db = mongojs('localhost:27017/multiplayerGame', ['account', 'progress'])
+
+db.account.insert({username:'admin', password: 'admin'})
+
 let express = require('express');
 const { setMaxListeners } = require('process');
 let app = express();
