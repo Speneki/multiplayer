@@ -1,8 +1,6 @@
 let mongojs = require('mongojs')
 let db = mongojs('localhost:27017/multiplayerGame', ['account', 'progress'])
 
-db.account.insert({username:'admin', password: 'admin'})
-
 let express = require('express');
 const { setMaxListeners } = require('process');
 let app = express();
@@ -166,28 +164,30 @@ Bullet.update = function() {
     return pack;
 } 
 
-let USERS = {
-    // username: password
-    "spencer":"pass"
-}
+
 
 let isValidPassword = function(data, cb) {
-    setTimeout(function(){
-        cb(USERS[data.username] === data.password);
-    }, 10);
+    db.account.find({username:data.username, password: data.password}, function(err, res) {
+        if (res.length > 0)
+            cb(true)
+        else    
+            cb(false)
+    });
 }
 
 let isUsernameTaken = function(data, cb) {
-    setTimeout(function () {
-        cb(USERS[data.username]);
-    }, 10)
+    db.account.find({ username: data.username}, function (err, res) {
+        if (res.length > 0)
+            cb(true)
+        else
+            cb(false)
+    });
 }
 
 let addUser = function(data, cb) {
-    setTimeout(function () {
-        USERS[data.username] = data.username;
-        cb()
-    }, 10);
+    db.account.insert({ username: data.username }, function (err) {
+        cb();
+    });
 }   
 
 let io = require("socket.io")(serv,{});
@@ -228,6 +228,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on("sendMesgToServer", function(data){
+        console.log(SOCKET_LIST[socket.id])
         let playerName = ("" + socket.id).slice(2,7);
         for( let i in SOCKET_LIST ) {
             SOCKET_LIST[i].emit("addToChat", playerName + ': ' + data);
