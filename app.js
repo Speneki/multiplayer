@@ -228,7 +228,6 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on("sendMesgToServer", function(data){
-        console.log(SOCKET_LIST[socket.id])
         let playerName = ("" + socket.id).slice(2,7);
         for( let i in SOCKET_LIST ) {
             SOCKET_LIST[i].emit("addToChat", playerName + ': ' + data);
