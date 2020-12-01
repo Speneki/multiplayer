@@ -61,8 +61,40 @@
     var chatText = document.getElementById("chat-text");
     var chatInput = document.getElementById("chat-input");
     var chatForm = document.getElementById("chat-form");
+
     var ctx = document.getElementById("ctx").getContext("2d");
     ctx.font = '30px Ariel';
+
+    var Player = function(initPack) {
+        var self = {};
+        self.id = initPack.id;
+        self.number = initPack.number;
+        self.x = initPack.x;
+        self.y = initPack.y;
+        Player.list[self.id] = self;
+        return self;
+    }
+    Player.list = {};
+
+    var Bullet = function(initPack) {
+        var self = {};
+        self.id = initPack.id;
+        self.x = initPack.x;
+        self.y = initPack.y;
+        Bullet.list[self.id] = self;
+        return self;
+    }
+    Bullet.list = {};
+
+    socket.on('init', function (data) {
+        ctx.clearRect(0, 0, 500, 500)
+        for (var i = 0; i < data.player.length; i++) {
+            new Player(data.player[i])
+        }
+        for (var i = 0; i < data.bullet.length; i++) {
+            new Bullet(data.bullet[i])
+        }
+    })
 
 
     socket.on('newPositions', function(data) {
